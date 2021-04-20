@@ -41,7 +41,7 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 
 	int nRND = Sesion.nRounds;
 	char nRNDstr[2];
-	int tRND = Sesion.DuracionRound;
+	int tRND = Sesion.DuracionRound-1;
 	char tRNDstr[2];
 	int tDSO = Sesion.DuracionDescanso;
 	char tDSOstr[2];
@@ -56,8 +56,8 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 		lcdGoToXY( 1, 1 );
 		lcdSendStringRaw(nRNDstr);
 
-		/*Di tRND=1, imprimo 0:59 y cuenta*/
-		if(tRND <= 1){
+		/*Si tRND=1, imprimo 0:59 y cuenta*/
+		if(tRND < 1){
 			lcdGoToXY( 5, 1 );
 			lcdSendStringRaw("0:");
 		}else{
@@ -87,7 +87,7 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 		if(segundos <=0){
 			segundos = 60;
 			--tRND;
-			if(tRND == 0){
+			if(tRND < 0){
 				while(tDSO>0)
 				{
 					gpioWrite(LED3, OFF);
@@ -109,7 +109,7 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 				}
 				gpioWrite(LED1, OFF);
 				tDSO = Sesion.DuracionDescanso;
-				tRND = Sesion.DuracionRound;
+				tRND = Sesion.DuracionRound-1;
 				--nRND;
 			}
 		}
@@ -124,4 +124,11 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 	delay(2000);
 
 	return MenuPrincipal;
+}
+
+bool_t debounce(gpioMap_t tecla){
+	static uint16_t state=0;
+	state = (state << 1)|!gpioRead(tecla)|0xE000;
+	if(state == 0xF000){return TRUE;}
+	return FALSE;
 }

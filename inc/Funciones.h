@@ -27,4 +27,7 @@ struct THRm medicionTHR(void);
 bool_t EstaBateriaBaja(void);
 
 estadoLCD TemporzacionIntervalo(struct tiempos);
+
+bool_t debounce(gpioMap_t );
+
 #endif /* PRE_INGRESO_TPPDM_INC_FUNCIONES_H_ */

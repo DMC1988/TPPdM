@@ -53,9 +53,6 @@ int main( void )
 
 	   case MenuConfigIntervalo:
 		   /*Configuración de intervalo*/
-			lcdGoToXY( 0, 0 );
-			lcdSendStringRaw( "Contando T  ");
-
 			SesionEntrenamiento = ConfiguracionInternavalo();
 			pantallaActual = SesionEntrenamiento.siguienteEstado;
 		   break;

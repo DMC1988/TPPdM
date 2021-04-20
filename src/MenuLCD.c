@@ -6,6 +6,7 @@
  */
 #include <TPPdM.h>
 #include <MenuLCD.h>
+#include <Funciones.h>
 
 #define nRoundMax 5
 #define nRoundMin 1
@@ -46,20 +47,17 @@ estadoLCD MenuPrincipalLCD(){
 	}
 	/*Chquear pulsadores*/
 
-	if(!gpioRead(BTNUP)){
-		delay(100); //Tengo que poner antirebote
+	if(debounce(BTNUP)){
 		++menuIndex;
 		if(menuIndex>3){menuIndex = 1;}
 		lcdClear();
 	}
-	if(!gpioRead(BTNDWN)){
-		delay(100); //Tengo que poner antirebote
+	if(debounce(BTNDWN)){
 		menuIndex--;
 		if(menuIndex<1){menuIndex = 3;}
 		lcdClear();
 	}
-	if(!gpioRead(BTNINTRO)){
-		delay(100); //Tengo que poner antirebote
+	if(debounce(BTNINTRO)){
 		lcdClear();
 		return opcionSeleccionada;
 	}
@@ -88,8 +86,7 @@ estadoLCD TempHRLCD(struct THRm THRmedido){
 	lcdGoToXY( 10, 1);
 	lcdSendStringRaw("%");
 
-	if(!gpioRead(BTNINTRO)){
-		delay(100); //Aca poner antirebote
+	if(debounce(BTNINTRO)){
 		return MenuPrincipal;
 		lcdClear();
 	}
@@ -119,8 +116,7 @@ estadoLCD VBatLCD(float Vbat){
     lcdGoToXY( 15, 0 );
     lcdSendStringRaw("V");
 
-    if(!gpioRead(BTNINTRO)){
-    	delay(100);
+    if(debounce(BTNINTRO)){
     	lcdClear();
     	return MenuPrincipal;
     }
@@ -139,7 +135,7 @@ struct tiempos ConfiguracionInternavalo(void){
 	char tDSOstr[2];
 
 	/*Seteo del numero de rounds*/
-	while(gpioRead(BTNINTRO)){
+	while(!debounce(BTNINTRO)){ //*antes gpioRead*/
 		lcdGoToXY( 0, 0 );
 		lcdSendStringRaw( "RND  tRND  tDSO" );
 
@@ -158,26 +154,23 @@ struct tiempos ConfiguracionInternavalo(void){
 		lcdGoToXY( 12, 1 );
 		lcdSendStringRaw(tDSOstr);
 
-		if(!gpioRead(BTNUP)){
-			delay(100); //Tengo que poner antirebote
+		if(debounce(BTNUP)){
 			++nRND;
 			if(nRND>nRoundMax){nRND = nRoundMin;}
 			lcdClear();
 		}
-		if(!gpioRead(BTNDWN)){
-			delay(100); //Tengo que poner antirebote
+		if(debounce(BTNDWN)){
 			nRND--;
 			if(nRND<nRoundMin){nRND = nRoundMax;}
 			lcdClear();
 		}
 	}
-	delay(200);
 	lcdClear();
 
 	/*Seteo de duracion de round*/
-	while(gpioRead(BTNINTRO)){
+	while(!debounce(BTNINTRO)){//*antes gpioRead*/
 		lcdGoToXY( 0, 0 );
-		lcdSendStringRaw( "RND   tRND  tDSO" );
+		lcdSendStringRaw( "RND  tRND  tDSO" );
 
 		lcdGoToXY( 5, 1 );
 		lcdSendStringRaw(">");
@@ -194,26 +187,23 @@ struct tiempos ConfiguracionInternavalo(void){
 		lcdGoToXY( 12, 1 );
 		lcdSendStringRaw(tDSOstr);
 
-		if(!gpioRead(BTNUP)){
-			delay(100); //Tengo que poner antirebote
+		if(debounce(BTNUP)){
 			++tRND;
 			if(tRND>tRoundMax){tRND = tRoundMin;}
 			lcdClear();
 		}
-		if(!gpioRead(BTNDWN)){
-			delay(100); //Tengo que poner antirebote
+		if(debounce(BTNDWN)){
 			tRND--;
 			if(tRND<tRoundMin){tRND = tRoundMax;}
 			lcdClear();
 		}
 	}
-	delay(200);
 	lcdClear();
 
 	/*Seteo de duracion de descanso*/
-	while(gpioRead(BTNINTRO)){
+	while(!debounce(BTNINTRO)){//*antes gpioRead*/
 		lcdGoToXY( 0, 0 );
-		lcdSendStringRaw( "RND   tRND  tDSO" );
+		lcdSendStringRaw( "RND  tRND  tDSO" );
 
 		lcdGoToXY( 11, 1 );
 		lcdSendStringRaw(">");
@@ -230,14 +220,12 @@ struct tiempos ConfiguracionInternavalo(void){
 		lcdGoToXY( 12, 1 );
 		lcdSendStringRaw(tDSOstr);
 
-		if(!gpioRead(BTNUP)){
-			delay(100); //Tengo que poner antirebote
+		if(debounce(BTNUP)){
 			++tDSO;
 			if(tDSO>tDescansoMax){tDSO = tDescansoMin;}
 			lcdClear();
 		}
-		if(!gpioRead(BTNDWN)){
-			delay(100); //Tengo que poner antirebote
+		if(debounce(BTNDWN)){
 			tDSO--;
 			if(tDSO<tDescansoMin){tDSO = tDescansoMax;}
 			lcdClear();
