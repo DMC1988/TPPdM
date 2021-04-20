@@ -69,13 +69,16 @@ int main( void )
 
 	   case TensionBateria:
 		   /*Medicion de tension de bateria*/
+
+		   /*Aviso de bateria baja*/
 			if(EstaBateriaBaja()){
 				MsgBateriaBajaLCD();
-			while(gpioRead(BTNINTRO)){}
+			while(!debounce(BTNINTRO)){}
 			delay(100);
 			lcdClear();
 			}
 			else{
+				/*Medicion debateria*/
 				gpioWrite(LED2, OFF);
 				Vbat =adcRead( CH1 )*0.00322;
 				pantallaActual = VBatLCD(Vbat);

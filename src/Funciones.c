@@ -61,31 +61,29 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 			lcdGoToXY( 5, 1 );
 			lcdSendStringRaw("0:");
 		}else{
-		sprintf(tRNDstr, "%d:", tRND);
-		lcdGoToXY( 5, 1 );
-		lcdSendStringRaw(tRNDstr);}
+			sprintf(tRNDstr, "%d:", tRND);
+			lcdGoToXY( 5, 1 );
+			lcdSendStringRaw(tRNDstr);}
 
-		sprintf(tDSOstr, "%d", tDSO);
-		lcdGoToXY( 12, 1 );
-		lcdSendStringRaw(tDSOstr);
+		/*Alinea los segundos segun sean >9 o no*/
+		if(tDSO >9){
+			sprintf(tDSOstr, "%d", tDSO);
+			lcdGoToXY( 12, 1 );
+			lcdSendStringRaw(tDSOstr);
+		}else{
+			sprintf(tDSOstr, "0%d", tDSO);
+			lcdGoToXY( 12, 1 );
+			lcdSendStringRaw(tDSOstr);
+		}
 
+		/*Conteo de los segundos del Round*/
 		delay(1000);
 		gpioToggle(LED3);
 		--segundos;
 
-		/*Alinea el conteo de segundos cuando el valor es <10*/
-		if(segundos>9){
-			sprintf(segundosstr, "%d", segundos);
-			lcdGoToXY( 7, 1 );
-			lcdSendStringRaw(segundosstr);
-		}else{
-			sprintf(segundosstr, "0%d", segundos);
-			lcdGoToXY( 7, 1 );
-			lcdSendStringRaw(segundosstr);
-		}
 
 		if(segundos <=0){
-			segundos = 60;
+			segundos = 59;
 			--tRND;
 			if(tRND < 0){
 				while(tDSO>0)
@@ -97,9 +95,9 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 
 					/*Alinea el conteo de segundos cuando el valor es <10*/
 					if(tDSO >9){
-					sprintf(tDSOstr, "%d", tDSO);
-					lcdGoToXY( 12, 1 );
-					lcdSendStringRaw(tDSOstr);
+						sprintf(tDSOstr, "%d", tDSO);
+						lcdGoToXY( 12, 1 );
+						lcdSendStringRaw(tDSOstr);
 					}else{
 						sprintf(tDSOstr, "0%d", tDSO);
 						lcdGoToXY( 12, 1 );
@@ -113,8 +111,20 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 				--nRND;
 			}
 		}
+
+		/*Alinea el conteo de segundos cuando el valor es <10*/
+		if(segundos>9){
+			sprintf(segundosstr, "%d", segundos);
+			lcdGoToXY( 7, 1 );
+			lcdSendStringRaw(segundosstr);
+		}else{
+			sprintf(segundosstr, "0%d", segundos);
+			lcdGoToXY( 7, 1 );
+			lcdSendStringRaw(segundosstr);
+		}
 	}
 
+	/*Aviso de finalización de entrenamiento.*/
 	gpioWrite(LED3, OFF);
 	lcdClear();
 	lcdGoToXY( 0, 0 );
