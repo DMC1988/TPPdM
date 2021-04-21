@@ -21,6 +21,7 @@ void LCDPresentacion(){
 	   lcdClear(); // Borrar la pantalla
 }
 
+
 struct THRm medicionTHR(void){
 	float humidity = 0, temperature = 0;
 	struct THRm THRmedida;
@@ -32,10 +33,12 @@ struct THRm medicionTHR(void){
 	return THRmedida;
 }
 
+
 bool_t EstaBateriaBaja(){
 	if(adcRead(CH1) < VBATMIN){return TRUE;}
 	else{return FALSE;}
 }
+
 
 estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 
@@ -45,8 +48,9 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 	char tRNDstr[2];
 	int tDSO = Sesion.DuracionDescanso;
 	char tDSOstr[2];
-	int segundos = 60;
+	int segundos = 59;
 	char segundosstr[3];
+
 
 	while(nRND>0){
 		lcdGoToXY( 0, 0 );
@@ -73,19 +77,17 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 		}else{
 			sprintf(tDSOstr, "0%d", tDSO);
 			lcdGoToXY( 12, 1 );
-			lcdSendStringRaw(tDSOstr);
-		}
+			lcdSendStringRaw(tDSOstr);		}
 
 		/*Conteo de los segundos del Round*/
 		delay(1000);
 		gpioToggle(LED3);
 		--segundos;
 
-
 		if(segundos <=0){
 			segundos = 59;
 			--tRND;
-			if(tRND < 0){
+			if(tRND <= 0){
 				while(tDSO>0)
 				{
 					gpioWrite(LED3, OFF);
@@ -136,9 +138,12 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 	return MenuPrincipal;
 }
 
+
 bool_t debounce(gpioMap_t tecla){
 	static uint16_t state=0;
 	state = (state << 1)|!gpioRead(tecla)|0xE000;
 	if(state == 0xF000){return TRUE;}
 	return FALSE;
 }
+
+

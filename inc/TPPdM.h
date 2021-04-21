@@ -20,13 +20,13 @@ extern "C" {
 #endif
 
 #include <sapi.h>
-/*=====[Definition macros of public constants]===============================*/
+
+
 #define BTNUP TEC1
 #define BTNDWN TEC2
 #define BTNINTRO TEC3
-/*=====[Public function-like macros]=========================================*/
 
-/*=====[Definitions of public data types]====================================*/
+
 /*Estados para la MEF*/
 typedef enum{
 	MenuPrincipal,
@@ -35,7 +35,7 @@ typedef enum{
 	TensionBateria,
 	ConteodeIntervalo,
 }estadoLCD;
-estadoLCD pantallaActual;
+estadoLCD pantallaActual; //!<- Variable de estado de la MEF.
 
 /*Estructura para el pasajo de datos de T y HR entre funciones*/
 struct THRm {
@@ -44,8 +44,10 @@ struct THRm {
 };
 struct THRm THRmedido;
 
+/*Variable para la tensión de la bateria*/
 float Vbat;
 
+/*Estrucutra para los tiempos de entrenamiento*/
 struct tiempos {
 	int nRounds;
 	int DuracionRound;
@@ -53,9 +55,8 @@ struct tiempos {
 	estadoLCD siguienteEstado;
 };
 struct tiempos SesionEntrenamiento;
-/*=====[Prototypes (declarations) of public functions]=======================*/
 
-/*=====[Prototypes (declarations) of public interrupt functions]=============*/
+
 
 /*=====[C++ - end]===========================================================*/
 

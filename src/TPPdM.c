@@ -22,6 +22,7 @@
 
 int main( void )
 {
+
    // ----- Setup -----------------------------------
    boardInit();
 
@@ -73,8 +74,9 @@ int main( void )
 		   /*Aviso de bateria baja*/
 			if(EstaBateriaBaja()){
 				MsgBateriaBajaLCD();
+				gpioWrite(LED2, ON);
 			while(!debounce(BTNINTRO)){}
-			delay(100);
+			gpioWrite(LED2, OFF);
 			lcdClear();
 			}
 			else{
@@ -87,12 +89,13 @@ int main( void )
 
 	   case ConteodeIntervalo:
 		   /*Conteo de tiempo de intervalos*/
+
 		   lcdGoToXY( 0, 0 );
 		   lcdSendStringRaw( "Conteo Int" );
 
 		   pantallaActual = TemporzacionIntervalo(SesionEntrenamiento);
-		   break;
 
+		   break;
 
 	   }
    }
@@ -102,3 +105,4 @@ int main( void )
    // case of a PC program.
    return 0;
 }
+

@@ -230,6 +230,7 @@ struct tiempos ConfiguracionInternavalo(void){
 			if(tDSO<tDescansoMin){tDSO = tDescansoMax;}
 			lcdClear();
 		}
+
 	}
 	delay(200);
 	lcdClear();
