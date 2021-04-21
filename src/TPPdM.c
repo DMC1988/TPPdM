@@ -96,7 +96,6 @@ int main( void )
 		   pantallaActual = TemporzacionIntervalo(SesionEntrenamiento);
 
 		   break;
-
 	   }
    }
 

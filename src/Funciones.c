@@ -87,7 +87,7 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 		if(segundos <=0){
 			segundos = 59;
 			--tRND;
-			if(tRND <= 0){
+			if(tRND < 0){
 				while(tDSO>0)
 				{
 					gpioWrite(LED3, OFF);
