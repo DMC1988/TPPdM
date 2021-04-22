@@ -232,7 +232,10 @@ struct tiempos ConfiguracionInternavalo(void){
 		}
 
 	}
-	delay(200);
+	//delay(200);
+	while(BT<4){} //Delay con timer
+	BT=0;
+
 	lcdClear();
 
 	ConfigSesion.nRounds = nRND;

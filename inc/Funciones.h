@@ -10,6 +10,7 @@
 
 #include <TPPdM.h>
 
+int BT;
 
 /**
  * \brief Exhibe en LCD el titulo del proyecto y el nombre del alumno
@@ -49,6 +50,8 @@ estadoLCD TemporzacionIntervalo(struct tiempos);
  * @return El estado del pulsador.
  * */
 bool_t debounce(gpioMap_t );
+
+void BasedeTiempo();
 
 
 #endif /* PRE_INGRESO_TPPDM_INC_FUNCIONES_H_ */

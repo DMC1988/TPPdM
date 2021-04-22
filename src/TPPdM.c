@@ -35,6 +35,10 @@ int main( void )
    /*Inicialización de DHT11*/
    dht11Init( GPIO1 );
 
+   /*Inicialización del timer*/
+   tickConfig( 50 );
+   tickCallbackSet(BasedeTiempo, 0);
+
    /*Inicialización de ADC*/
    adcConfig( ADC_ENABLE );
 

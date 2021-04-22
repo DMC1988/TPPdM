@@ -11,13 +11,16 @@
 
 #define VBATMIN 837 // Equivalente a 2,7V
 
+
 void LCDPresentacion(){
 	  lcdGoToXY( 0, 0 ); // Poner cursor en 0, 0
 	   lcdSendStringRaw( "TP PdM 2021" );
 
 	   lcdGoToXY( 0, 1 );
 	   lcdSendStringRaw( "Damian Caputo");
-	   delay(3000);
+
+	   delay(2000);
+
 	   lcdClear(); // Borrar la pantalla
 }
 
@@ -52,79 +55,88 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 	char segundosstr[3];
 
 
-	while(nRND>0){
-		lcdGoToXY( 0, 0 );
-		lcdSendStringRaw( "RND  tRND  tDSO" );
+		while(nRND>0){
 
-		sprintf(nRNDstr, "%d", nRND);
-		lcdGoToXY( 1, 1 );
-		lcdSendStringRaw(nRNDstr);
+			lcdGoToXY( 0, 0 );
+			lcdSendStringRaw( "RND  tRND  tDSO" );
 
-		/*Si tRND=1, imprimo 0:59 y cuenta*/
-		if(tRND < 1){
-			lcdGoToXY( 5, 1 );
-			lcdSendStringRaw("0:");
-		}else{
-			sprintf(tRNDstr, "%d:", tRND);
-			lcdGoToXY( 5, 1 );
-			lcdSendStringRaw(tRNDstr);}
+			sprintf(nRNDstr, "%d", nRND);
+			lcdGoToXY( 1, 1 );
+			lcdSendStringRaw(nRNDstr);
 
-		/*Alinea los segundos segun sean >9 o no*/
-		if(tDSO >9){
-			sprintf(tDSOstr, "%d", tDSO);
-			lcdGoToXY( 12, 1 );
-			lcdSendStringRaw(tDSOstr);
-		}else{
-			sprintf(tDSOstr, "0%d", tDSO);
-			lcdGoToXY( 12, 1 );
-			lcdSendStringRaw(tDSOstr);		}
+			/*Si tRND=1, imprimo 0:59 y cuenta*/
+			if(tRND < 1){
+				lcdGoToXY( 5, 1 );
+				lcdSendStringRaw("0:");
+			}else{
+				sprintf(tRNDstr, "%d:", tRND);
+				lcdGoToXY( 5, 1 );
+				lcdSendStringRaw(tRNDstr);}
 
-		/*Conteo de los segundos del Round*/
-		delay(1000);
-		gpioToggle(LED3);
-		--segundos;
+			/*Alinea los segundos segun sean >9 o no*/
+			if(tDSO >9){
+				sprintf(tDSOstr, "%d", tDSO);
+				lcdGoToXY( 12, 1 );
+				lcdSendStringRaw(tDSOstr);
+			}else{
+				sprintf(tDSOstr, "0%d", tDSO);
+				lcdGoToXY( 12, 1 );
+				lcdSendStringRaw(tDSOstr);		}
 
-		if(segundos <=0){
-			segundos = 59;
-			--tRND;
-			if(tRND < 0){
-				while(tDSO>0)
-				{
-					gpioWrite(LED3, OFF);
-					delay(1000);
-					gpioToggle(LED1);
-					--tDSO;
+			/*Conteo de los segundos del Round*/
+			//delay(1000);
 
-					/*Alinea el conteo de segundos cuando el valor es <10*/
-					if(tDSO >9){
-						sprintf(tDSOstr, "%d", tDSO);
-						lcdGoToXY( 12, 1 );
-						lcdSendStringRaw(tDSOstr);
-					}else{
-						sprintf(tDSOstr, "0%d", tDSO);
-						lcdGoToXY( 12, 1 );
-						lcdSendStringRaw(tDSOstr);
+			while(BT<20){} //Delay con timer
+			BT=0;
+
+			gpioToggle(LED3);
+			//--segundos;
+
+			if(segundos <0){
+				segundos = 59;
+				--tRND;
+				if(tRND <0){
+					while(tDSO>0)
+					{
+						gpioWrite(LED3, OFF);
+						//delay(1000);
+						while(BT<20){}//Delay con timer
+						BT=0;
+
+						gpioToggle(LED1);
+						--tDSO;
+
+						/*Alinea el conteo de segundos cuando el valor es <10*/
+						if(tDSO >9){
+							sprintf(tDSOstr, "%d", tDSO);
+							lcdGoToXY( 12, 1 );
+							lcdSendStringRaw(tDSOstr);
+						}else{
+							sprintf(tDSOstr, "0%d", tDSO);
+							lcdGoToXY( 12, 1 );
+							lcdSendStringRaw(tDSOstr);
+						}
+
 					}
-
+					gpioWrite(LED1, OFF);
+					tDSO = Sesion.DuracionDescanso;
+					tRND = Sesion.DuracionRound-1;
+					--nRND;
 				}
-				gpioWrite(LED1, OFF);
-				tDSO = Sesion.DuracionDescanso;
-				tRND = Sesion.DuracionRound-1;
-				--nRND;
 			}
-		}
 
-		/*Alinea el conteo de segundos cuando el valor es <10*/
-		if(segundos>9){
-			sprintf(segundosstr, "%d", segundos);
-			lcdGoToXY( 7, 1 );
-			lcdSendStringRaw(segundosstr);
-		}else{
-			sprintf(segundosstr, "0%d", segundos);
-			lcdGoToXY( 7, 1 );
-			lcdSendStringRaw(segundosstr);
+			/*Alinea el conteo de segundos cuando el valor es <10*/
+			if(segundos>9){
+				sprintf(segundosstr, "%d", segundos);
+				lcdGoToXY( 7, 1 );
+				lcdSendStringRaw(segundosstr);
+			}else{
+				sprintf(segundosstr, "0%d", segundos);
+				lcdGoToXY( 7, 1 );
+				lcdSendStringRaw(segundosstr);
+			}
+			segundos--;
 		}
-	}
 
 	/*Aviso de finalización de entrenamiento.*/
 	gpioWrite(LED3, OFF);
@@ -133,7 +145,9 @@ estadoLCD TemporzacionIntervalo(struct tiempos Sesion){
 	lcdSendStringRaw( "*Entrenamiento*" );
 	lcdGoToXY( 0, 1 );
 	lcdSendStringRaw( "**Finalizado***" );
-	delay(2000);
+
+	while(BT<20){} //Delay con timer
+	BT=0;
 
 	return MenuPrincipal;
 }
@@ -144,6 +158,13 @@ bool_t debounce(gpioMap_t tecla){
 	state = (state << 1)|!gpioRead(tecla)|0xE000;
 	if(state == 0xF000){return TRUE;}
 	return FALSE;
+}
+
+
+void BasedeTiempo(){
+	if(BT>=20){BT = 0;}
+	++BT;
+
 }
 
 
