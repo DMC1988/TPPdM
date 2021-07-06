@@ -3,7 +3,7 @@ Trabajo final para la asignatura Programación de Microprocesadores para la Espe
 
 ### Alumno: Damián Caputo
 ### Plataforma embebida: EDU-CIAA-NXP
-## Alicación:
+## Aplicación:
 El firmware controla un display que exhibe un menú de 3 opciones. El menu se recorre mediante la acción de dos pulsadores y un tercero oficia como pulsador de enter.
 1. Config. Int: El usuario setea la cantidad de intervalos de entrenamiento (maximo 5), tiempo de intervalo (maximo 3) y el tiempo de descanso entre intervalos (maximo 60s).
 Al aceptar la configuración el dispositivo exhibe una pantalla con el intervalo en curso, la cuenta regresiva del tiempo de intervalo restante y el tiempo de descanso,
