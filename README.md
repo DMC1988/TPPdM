@@ -1,95 +1,87 @@
-# Programación de microprocesadores: Trabajo Final
-Trabajo final para la asignatura Programación de Microprocesadores para la Especialización en Sistemas Embebidos de FIUBA.
+# Microprocessor programming: Final project
+Final work for the subject Microprocessor Programming for the Specialization in Embedded Systems at FIUBA.
 
-### Alumno: Damián Caputo
-### Plataforma embebida: EDU-CIAA-NXP
-## Aplicación:
-El firmware controla un display que exhibe un menú de 3 opciones. El menu se recorre mediante la acción de dos pulsadores y un tercero oficia como pulsador de enter.
-1. Config. Int: El usuario setea la cantidad de intervalos de entrenamiento (maximo 5), tiempo de intervalo (maximo 3) y el tiempo de descanso entre intervalos (maximo 60s).
-Al aceptar la configuración el dispositivo exhibe una pantalla con el intervalo en curso, la cuenta regresiva del tiempo de intervalo restante y el tiempo de descanso,
-tambien en cuenta regresiva.
-2. Temp y HR.: El display LCD exhibe la temperatura ambiente y la humedad relativa medida.
-3. Med. Bateria: El display exhibe la tensión de la batería. Si mide una tensión menor a 2,7V se exhibe en pantalla un aviso de bateria baja y se enciende el LED rojo.
-Luego del aviso se vuelve al menu principal presionando el pulsador enter cuando la tensión es mayor a 2.7V.
+### Alumn: Damián Caputo
+### Platafor: EDU-CIAA-NXP
+## Aplicaction:
+The firmware controls a display that displays a 3-option menu. The menu is navigated through the action of two buttons and a third acts as an enter button.
+1. Settings Int: The user sets the number of training intervals (maximum 5), interval time (maximum 3) and rest time between intervals (maximum 60s).
+Upon accepting the configuration, the device displays a screen with the current interval, the countdown of the remaining interval time and the rest time,
+also in countdown.
+2. Temp and HR.: The LCD display shows the ambient temperature and the measured relative humidity.
+3. Battery Measurement: The display shows the battery voltage. If it measures a voltage lower than 2.7V, a low battery warning is displayed on the screen and the red LED lights up.
+After the warning, return to the main menu by pressing the enter button when the voltage is greater than 2.7V.
 
-## Periféricos:
+## Peripherals:
 GPIO, ADC, TIMER.
 
-## Descripción de los estados:
-Presentación: Exhibe en pantalla el título del proyecto durante 3 s.
+## States description:
+Presentation: Displays the project title on the screen for 3 s.
 
-MenuPrincipal,: Exhibe en pantalla 3 opciones seleccionables mediante teclado:
-1. *Config. Int.*
-2. *Temp. y HR.*
-3. *Med. Bateria*
+MainMenu: Displays 3 options on the screen that can be selected using the keyboard:
+1. *Settings Int.*
+2. *Temp. and HR.*
+3. *Med. Battery*
 
-- **MenuConfigIntervalo:** Exhibe en pantalla la opción de setear la cantidad de intervalos, tiempo de intervalo y tiempo entre intervalos mediante teclado.
-- **Pantalla Conteo:** Exhibe el intervalo actual, la cuenta regresiva del tiempo de intervalo y el tiempo de descanso, tambien en forma regresiva. Durante el tiempo de intervalo parpadea el LED verde y durante el tiempo de descanso parapadea el LED amarillo.
-- **ConteodeIntervalo:** Rutina de temporización de 1 s y actualización periódica de display.
-- **Pantalla Temp. y humedad:** Exhibe la temperatura y la humedad medidas.
-- **TemperaturaYHumedad:** Rutina para realizar la medición de temperatura y humedad.
-- **TensionBateria:** Exhibe la tensión de la temperatura.
-- **Medición de  batería:** Rutina para medir la tensión de la batería.
+- **MenuConfigInterval:** Displays on the screen the option to set the number of intervals, interval time and time between intervals using the keyboard.
+- **Count Screen:** Displays the current interval, the countdown of the interval time and the rest time, also in countdown. During the interval time the green LED flashes and during the rest time the yellow LED flashes.
+- **IntervalCount:** 1 s timing routine and periodic display update.
+- **Screen Temp. and humidity:** Displays the measured temperature and humidity.
+- **TemperatureAndHumidity:** Routine to measure temperature and humidity.
+- **Battery Voltage:** Displays the temperature voltage.
+- **Battery measurement:** Routine to measure battery voltage.
+- 
+## Software modules
+TPPdM.c and TPPdM.h, contain the state machine and state variables.
 
-## Modulos de software
-TPPdM.c y TPPdM.h, contine la maquina de estado y variables de estado.
+MenuLCD.c and MenuLCD.h contain the menus and variables associated with them.
 
-MenuLCD.c y MenuLCD.h,contiene los menu y variables asociadas a ellos.
-
-Funciones.c y funciones.h, contiene funciones de temporización y medición de magnituds físicas.
+Functions.c and functions.h, contain functions for timing and measuring physical quantities.
 
 ### MenuLCD.h
 
-\brief Presenta en el LCD el menu principal en pantalla y gestiona la selección de funciones.
+\brief Presents the main on-screen menu on the LCD and manages the selection of functions
 
 *estadoLCD MenuPrincipalLCD(void);*
 
-
-\brief Presenta en el LCD la temperatura y huemedad en la pantalla.
+\brief Presents the temperature and humidity on the LCD screen..
 
 *estadoLCD TempHRLCD(struct THRm);*
 
-
-\brief Presenta en el LCD el mensaje de bateria baja.
+\brief Displays the low battery message on the LCD.
 
 *void MsgBateriaBajaLCD(void);*
 
-
-\brief Presenta en el LCD la medición de la tensión de la bateria
+\brief Presents the battery voltage measurement on the LCD.
  
 *estadoLCD VBatLCD(float);*
 
-
-\brief Presenta en la pantalla LCD la configuración de tiempos de entrenamiento gestiona la selección de tiempos mediante los pulsadores.
+\brief Presents the training time configuration on the LCD screen and manages the selection of times using the buttons.
 
 *struct tiempos ConfiguracionInternavalo(void);*
 
 
 ### Funciones.h
 
-\brief Exhibe en LCD el titulo del proyecto y el nombre del alumno
+\brief Displays the title of the project and the name of the student on LCD
 
 *void LCDPresentacion(void);*
 
-
-\brief Realiza la medición de temperatura y humedad a traves del DHT11.
+\brief Measures temperature and humidity through the DHT11.
 
 *struct THRm medicionTHR(void);*
 
-
-\brief Detecta bateria baja.
+\brief Detects low battery.
 
 *bool_t EstaBateriaBaja(void);*
 
-
-\brief Función que exhibe y realiza la cuenta de tiempos de entrenamiento.
+\brief Function that displays and counts training times.
 
 *estadoLCD TemporzacionIntervalo(struct tiempos);*
 
-
-\brief Función antirrebote de pulsadores.
+\brief Pushbutton debounce function.
 
 *bool_t debounce(gpioMap_t );*
 
-\brief Función para temporizar un segundo.
+\brief Function to time one second.
 *void BasedeTiempo();*
